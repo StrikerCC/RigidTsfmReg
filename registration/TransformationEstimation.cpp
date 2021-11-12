@@ -5,7 +5,10 @@
 #include "TransformationEstimation.h"
 
 double TransformationEstimation::ComputeRMSE(const PointSet &src, const PointSet &tgt) {
-    assert (src.GetNumOfPoints() == tgt.GetNumOfPoints());
+    if (src.GetNumOfPoints() != tgt.GetNumOfPoints()) {
+        std::cout << "TransformationEstimation::ComputeRMSE: number of source points: " << src.GetNumOfPoints() << " doesn't match with number of target points: " << tgt.GetNumOfPoints() << std::endl;
+        return INFINITY;
+    }
     if (src.empty()) {
         std::cout << "TransformationEstimation::ComputeRMSE: No points to compute rmse" << std::endl;
         return 0.0;
@@ -24,12 +27,15 @@ TransformationEstimation::ComputeTransformation(const PointSet &src, const Point
 //                                                      {0.0, 1.0, 0.0, 0.0},
 //                                                      {0.0, 0.0, 1.0, 0.0},
 //                                                      {0.0, 0.0, 0.0, 1.0}};
-    assert(src.GetNumOfPoints() == tgt.GetNumOfPoints());
-
-    if (src.empty()) {
-        std::cout << "TransformationEstimation::ComputeRMSE: No points to compute transformation" << std::endl;
+    if (src.GetNumOfPoints() != tgt.GetNumOfPoints()) {
+        std::cout << "TransformationEstimation::ComputeTransformation: number of source points: " << src.GetNumOfPoints() << " doesn't match with number of target points: " << tgt.GetNumOfPoints() << std::endl;
         return Eigen::Matrix4d::Identity();
     }
+    if (src.GetNumOfPoints() < 3) {
+        std::cout << "TransformationEstimation::ComputeTransformation: "<< src.GetNumOfPoints() <<" point pairs is not enough to compute a transformation" << std::endl;
+        return Eigen::Matrix4d::Identity();
+    }
+
     // build point vector for umeyama
     Eigen::MatrixXd source_mat(3, src.GetNumOfPoints());
     Eigen::MatrixXd target_mat(3, src.GetNumOfPoints());

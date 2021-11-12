@@ -8,6 +8,12 @@
 #include <eigen3/Eigen/Core>
 #include <vector>
 
+enum class status {
+    reg_incomplete = 0,
+    reg_success = 1,
+    reg_fail = -1
+};
+
 class Registration {
 public:
     Registration() = default;
@@ -16,7 +22,7 @@ public:
     /// estimate a optimal rigid body transformation that mapping points in source frame to target frame
     /// \param src source points
     /// \param tgt target points
-    void RegisterWithSequenceAsCorrespondence(const std::vector<std::vector<double>>& src, const std::vector<std::vector<double>>& tgt);
+    status RegisterWithSequenceAsCorrespondence(const std::vector<std::vector<double>>& src, const std::vector<std::vector<double>>& tgt);
 
 public:
     /// last transformation estimated by function Registration::RegisterWithSequenceAsCorrespondence

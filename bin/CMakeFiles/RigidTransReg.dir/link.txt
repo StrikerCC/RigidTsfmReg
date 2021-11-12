@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/RigidTransReg.dir/main.cpp.o CMakeFiles/RigidTransReg.dir/TransformationEstimation.cpp.o CMakeFiles/RigidTransReg.dir/PointSet.cpp.o -o RigidTransReg 

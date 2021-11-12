@@ -5,10 +5,17 @@
 #include "PointSet.h"
 
 PointSet::PointSet(const std::vector<std::vector<double>> &points) {
-    PointSet::points_ = std::vector<Eigen::Vector3d>();
+//    PointSet::points_ = std::vector<Eigen::Vector3d>();
     for (auto point : points) {
-        assert(point.size() >= 3);
-        PointSet::points_.emplace_back(point[0], point[1], point[2]);
+        if (point.size() >= 3) {
+            PointSet::points_.emplace_back(point[0], point[1], point[2]);
+        } else {    // ignore this point, and print it for debug
+            std::cout << "PointSet::PointSet: (";
+            for (auto coord : point) {
+                std::cout << coord;
+            }
+            std::cout << ") is no enough coordinate to init a point" << std::endl;
+        }
     }
 }
 
@@ -33,6 +40,9 @@ bool PointSet::empty() const {
 }
 
 void PointSet::Transform(Eigen::Matrix4d transformation) {
+    if (this->GetNumOfPoints() == 0) {
+        return;
+    }
     if ((transformation * transformation.transpose()).isIdentity()) {
         std::cout << "PointSet::Transform: " << transformation << " not seems to be a rigid transformation matrix" << std::endl;
     }
@@ -63,6 +73,9 @@ std::vector<std::vector<double>> PointSet::Transform(const std::vector<std::vect
 
 
 std::vector<double> PointSet::Transform(const std::vector<double> &point, const Eigen::Matrix4d &transformation) {
+    if (point.size() < 3) {
+        return point;
+    }
     return PointSet::Transform(std::vector<std::vector<double>> {point}, transformation)[0];
 }
 

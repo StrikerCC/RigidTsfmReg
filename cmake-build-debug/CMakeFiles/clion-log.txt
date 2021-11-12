@@ -1,0 +1,6 @@
+/home/cheng/utils/CLion-2021.2.1/clion-2021.2.1/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/cc -DCMAKE_CXX_COMPILER=/usr/bin/c++ -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /home/cheng/proj/3d/RigidTsfmReg
+-- operation system is Linux-5.13.0-7620-generic
+-- other platform: Linux
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/cheng/proj/3d/RigidTsfmReg/cmake-build-debug

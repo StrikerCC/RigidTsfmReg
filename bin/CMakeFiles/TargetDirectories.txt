@@ -1,0 +1,3 @@
+/home/cheng/proj/3d/RigidTransReg/bin/CMakeFiles/rebuild_cache.dir
+/home/cheng/proj/3d/RigidTransReg/bin/CMakeFiles/edit_cache.dir
+/home/cheng/proj/3d/RigidTransReg/bin/CMakeFiles/RigidTransReg.dir

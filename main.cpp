@@ -3,113 +3,120 @@
 #include "registration/Registration.h"
 #include "registration/TransformationEstimation.h"
 #include "registration/PointSet.h"
-
-std::vector<std::vector<double>> Txt2Vec2D(const std::string &file_path) {
-    std::vector<std::vector<double>> xyzs;
-    /// read txt file line by line
-    std::ifstream f;
-    f.open(file_path);
-    std::string line;
-    double x, y, z;
-
-    int i = 0;
-    while (!f.eof()) {
-        f >> x >> y >> z;
-        xyzs.push_back(std::vector<double>({x, y, z}));
-    }
-    ///
-    return xyzs;
-}
-
-int main_() {
-    std::cout << "Hello, World!" << std::endl;
-    std::vector<std::vector<double>> points = Txt2Vec2D("./data/3D_model.txt");
-//    std::vector<std::vector<double>> pose = Txt2Vec2D("./data/pose_00000000.txt");
-    std::vector<Eigen::Matrix4d> transfs;
-    {
-        Eigen::Matrix4d transf = Eigen::Matrix4d::Identity();
-        transf <<
-               0.00451317, 0.536868, -0.843654, 0.730193,
-                0.999982, 0.000686538, 0.00578636, -0.0337547,
-                0.00368572, -0.843667, -0.536856, 0.471792,
-                0, 0, 0, 1;
-        transfs.emplace_back(Eigen::Matrix4d(transf));
-
-        transf <<
-               0.296139, 0.516011, -0.803766, 0.677304, 0.955138, -0.156268, 0.251589, -0.244826, 0.00421977, -0.84221, -0.539136, 0.473783, 0, 0, 0, 1;
-        transfs.emplace_back(Eigen::Matrix4d(transf));
-
-        transf <<
-               0.605034, 0.433097, -0.668107, 0.540048, 0.796197, -0.32561, 0.509956, -0.458985, 0.00331693, -0.840482, -0.541834, 0.476038, 0, 0, 0, 1;
-        transfs.emplace_back(Eigen::Matrix4d(transf));
-
-        transf <<
-               0.817534, 0.31885, -0.479567, 0.363181, 0.575841, -0.441911, 0.687846, -0.599921, 0.00739278, -0.838488, -0.54488, 0.478367, 0, 0, 0, 1;
-        transfs.emplace_back(Eigen::Matrix4d(transf));
-    }
-
-    for (const auto& transf: transfs) {
-        PointSet src = PointSet(points);
-        PointSet tgt = PointSet(points);
-        tgt.Transform(transf);
-
-        Registration reg = Registration();
-        reg.RegisterWithSequenceAsCorrespondence(src.GetPoints(), tgt.GetPoints());
-//        auto tf_src_2_tgt = tf_est.ComputeTransformationRANSAC(src, tgt);
-
-
-
-        int i_who = 0;
-        std::cout << "{";
-        for (const auto& point : src.GetPoints()) {
-            if (i_who > 20) break;
-            std::cout << "{";
-            for (auto coord : point) {
-                std::cout << coord << ", ";
-            }
-            std::cout << "},";
-            std::cout << std::endl;
-            i_who++;
-        }
-        std::cout << "}" << std::endl;
-        i_who = 0;
-
-        std::cout << "{";
-        for (const auto& point : tgt.GetPoints()) {
-            if (i_who > 20) break;
-            std::cout << "{";
-            for (auto coord : point) {
-                std::cout << coord << ", ";
-            }
-            std::cout << "},";
-            std::cout << std::endl;
-            i_who++;
-        }
-        std::cout << "}" << std::endl;
-        std::cout << std::endl;
-
-
-
-
-        src.Transform(reg.transformation_);
-
-        /// compute error
-        std::cout << "Ground truth: \n" << transf << std::endl;
-        std::cout << std::endl;
-        std::cout << "computed transformation: \n" << reg.transformation_ << std::endl;
-        std::cout << std::endl;
-        std::cout << "RMSE: " << TransformationEstimation::ComputeRMSE(src, tgt);
-        std::cout << std::endl;
-
-    }
-    return 0;
-}
+//
+//std::vector<std::vector<double>> Txt2Vec2D(const std::string &file_path) {
+//    std::vector<std::vector<double>> xyzs;
+//    /// read txt file line by line
+//    std::ifstream f;
+//    f.open(file_path);
+//    std::string line;
+//    double x, y, z;
+//
+//    int i = 0;
+//    while (!f.eof()) {
+//        f >> x >> y >> z;
+//        xyzs.push_back(std::vector<double>({x, y, z}));
+//    }
+//    ///
+//    return xyzs;
+//}
+//
+//int main_() {
+//    std::cout << "Hello, World!" << std::endl;
+//    std::vector<std::vector<double>> points = Txt2Vec2D("./data/3D_model.txt");
+////    std::vector<std::vector<double>> pose = Txt2Vec2D("./data/pose_00000000.txt");
+//    std::vector<Eigen::Matrix4d> transfs;
+//    {
+//        Eigen::Matrix4d transf = Eigen::Matrix4d::Identity();
+//        transf <<
+//               0.00451317, 0.536868, -0.843654, 0.730193,
+//                0.999982, 0.000686538, 0.00578636, -0.0337547,
+//                0.00368572, -0.843667, -0.536856, 0.471792,
+//                0, 0, 0, 1;
+//        transfs.emplace_back(Eigen::Matrix4d(transf));
+//
+//        transf <<
+//               0.296139, 0.516011, -0.803766, 0.677304, 0.955138, -0.156268, 0.251589, -0.244826, 0.00421977, -0.84221, -0.539136, 0.473783, 0, 0, 0, 1;
+//        transfs.emplace_back(Eigen::Matrix4d(transf));
+//
+//        transf <<
+//               0.605034, 0.433097, -0.668107, 0.540048, 0.796197, -0.32561, 0.509956, -0.458985, 0.00331693, -0.840482, -0.541834, 0.476038, 0, 0, 0, 1;
+//        transfs.emplace_back(Eigen::Matrix4d(transf));
+//
+//        transf <<
+//               0.817534, 0.31885, -0.479567, 0.363181, 0.575841, -0.441911, 0.687846, -0.599921, 0.00739278, -0.838488, -0.54488, 0.478367, 0, 0, 0, 1;
+//        transfs.emplace_back(Eigen::Matrix4d(transf));
+//    }
+//
+//    for (const auto& transf: transfs) {
+//        PointSet src = PointSet(points);
+//        PointSet tgt = PointSet(points);
+//        tgt.Transform(transf);
+//
+//        Registration reg = Registration();
+//        reg.RegisterWithSequenceAsCorrespondence(src.GetPoints(), tgt.GetPoints());
+////        auto tf_src_2_tgt = tf_est.ComputeTransformationRANSAC(src, tgt);
+//
+//
+//
+//        int i_who = 0;
+//        std::cout << "{";
+//        for (const auto& point : src.GetPoints()) {
+//            if (i_who > 20) break;
+//            std::cout << "{";
+//            for (auto coord : point) {
+//                std::cout << coord << ", ";
+//            }
+//            std::cout << "},";
+//            std::cout << std::endl;
+//            i_who++;
+//        }
+//        std::cout << "}" << std::endl;
+//        i_who = 0;
+//
+//        std::cout << "{";
+//        for (const auto& point : tgt.GetPoints()) {
+//            if (i_who > 20) break;
+//            std::cout << "{";
+//            for (auto coord : point) {
+//                std::cout << coord << ", ";
+//            }
+//            std::cout << "},";
+//            std::cout << std::endl;
+//            i_who++;
+//        }
+//        std::cout << "}" << std::endl;
+//        std::cout << std::endl;
+//
+//
+//
+//
+//        src.Transform(reg.transformation_);
+//
+//        /// compute error
+//        std::cout << "Ground truth: \n" << transf << std::endl;
+//        std::cout << std::endl;
+//        std::cout << "computed transformation: \n" << reg.transformation_ << std::endl;
+//        std::cout << std::endl;
+//        std::cout << "RMSE: " << TransformationEstimation::ComputeRMSE(src, tgt);
+//        std::cout << std::endl;
+//
+//    }
+//    return 0;
+//}
 
 int main() {
     Registration reg = Registration();
 
-    std::vector<std::vector<double>> src_points = {{0.0, 0.0, 0.0,}, {2.0, 2.0, 2.0,}};
-    std::vector<std::vector<double>> tgt_points = {{1.0, 1.0, 1.0,}, {3.0, 3.0, 3.0,}};
+    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
+                                                   {0.0596195, 0.0500485, 0.0889023, },
+                                                   {0.0597568, 0.0515476, 0.0861541, }};
+
+    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
+                                                   {0.385245, -0.526556, 0.388402, },};
+//                                                   {0.387153, -0.529029, 0.388643, }};
+
+    std::vector<double> query_point = {0.0595164, 0.0533297, 0.0857159, };
 
 //    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
 //                                                   {0.0596195, 0.0500485, 0.0889023, },
@@ -156,11 +163,12 @@ int main() {
 //                                                   {0.387333, -0.526829, 0.391257, },};
 
     /// estimate transformation
-    reg.RegisterWithSequenceAsCorrespondence(src_points, tgt_points);
+    auto result = reg.RegisterWithSequenceAsCorrespondence(src_points, tgt_points);
+    std::cout << (int) result << std::endl;
 
     /// do transformation
     auto src_points_2_tgt_frame = PointSet::Transform(src_points, reg.transformation_); // transform point set
-    auto src_point_2_tgt_frame = PointSet::Transform(src_points[0], reg.transformation_ );// transform a point
+    auto src_point_2_tgt_frame = PointSet::Transform(query_point, reg.transformation_ );// transform a point
 
     /// error
     std::cout << "Point Set Transformation: " << std::endl;
