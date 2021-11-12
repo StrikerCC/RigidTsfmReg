@@ -5,8 +5,8 @@
 #ifndef RIGIDTRANSREG_TRANSFORMATIONESTIMATION_H
 #define RIGIDTRANSREG_TRANSFORMATIONESTIMATION_H
 
-#include <eigen3/Eigen/Core>
-#include <eigen3/Eigen/Geometry>
+#include <Eigen/Core>
+#include <Eigen/Geometry>
 #include <vector>
 #include <iostream>
 #include <random>
