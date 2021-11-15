@@ -3,6 +3,8 @@
 #include "registration/Registration.h"
 #include "registration/TransformationEstimation.h"
 #include "registration/PointSet.h"
+#include <chrono>
+
 //
 //std::vector<std::vector<double>> Txt2Vec2D(const std::string &file_path) {
 //    std::vector<std::vector<double>> xyzs;
@@ -108,24 +110,16 @@
 int main() {
     Registration reg = Registration();
 
-    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
-                                                   {0.0596195, 0.0500485, 0.0889023, },
-                                                   {0.0597568, 0.0515476, 0.0861541, }};
-
-    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
-                                                   {0.385245, -0.526556, 0.388402, },};
-//                                                   {0.387153, -0.529029, 0.388643, }};
-
     std::vector<double> query_point = {0.0595164, 0.0533297, 0.0857159, };
 
-//    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
-//                                                   {0.0596195, 0.0500485, 0.0889023, },
-//                                                   {0.0597568, 0.0515476, 0.0861541, },
-//                                                   {0.0599648, 0.0502481, 0.0876689, },
-//                                                   {0.0598265, 0.0499625, 0.0860588, },
-//                                                   {0.0596821, 0.0456999, 0.092095, },
-//                                                   {0.0595453, 0.0439616, 0.0932945, },
-//                                                   {0.0601673, 0.0442375, 0.0924098, },
+    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
+                                                   {0.0596195, 0.0500485, 0.0889023, },
+                                                   {0.0597568, 0.0515476, 0.0861541, },
+                                                   {0.0599648, 0.0502481, 0.0876689, },
+                                                   {0.0598265, 0.0499625, 0.0860588, },
+                                                   {0.0596821, 0.0456999, 0.092095, },
+                                                   {0.0595453, 0.0439616, 0.0932945, },
+                                                   {0.0601673, 0.0442375, 0.0924098, }};
 //                                                   {0.0626142, 0.0467576, 0.0860099, },
 //                                                   {0.0624336, 0.0435443, 0.0888359, },
 //                                                   {0.0646273, 0.0439355, 0.0879918, },
@@ -139,15 +133,15 @@ int main() {
 //                                                   {0.0594974, 0.0467962, 0.0906146, },
 //                                                   {0.0601746, 0.0471376, 0.0892356, },
 //                                                   {0.0611901, 0.0484408, 0.0861569, },};
-//
-//    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
-//                                                   {0.385245, -0.526556, 0.388402, },
-//                                                   {0.387153, -0.529029, 0.388643, },
-//                                                   {0.386183, -0.527293, 0.388909, },
-//                                                   {0.386751, -0.528354, 0.390025, },
-//                                                   {0.382379, -0.522402, 0.390309, },
-//                                                   {0.381137, -0.520887, 0.391112, },
-//                                                   {0.382158, -0.52126, 0.391367, },
+
+    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
+                                                   {0.385245, -0.526556, 0.388402, },
+                                                   {0.387153, -0.529029, 0.388643, },
+                                                   {0.386183, -0.527293, 0.388909, },
+                                                   {0.386751, -0.528354, 0.390025, },
+                                                   {0.382379, -0.522402, 0.390309, },
+                                                   {0.381137, -0.520887, 0.391112, },
+                                                   {0.382158, -0.52126, 0.391367, }};
 //                                                   {0.388031, -0.525366, 0.392759, },
 //                                                   {0.385504, -0.522106, 0.393912, },
 //                                                   {0.387827, -0.521597, 0.39406, },
@@ -163,8 +157,15 @@ int main() {
 //                                                   {0.387333, -0.526829, 0.391257, },};
 
     /// estimate transformation
+    auto start = std::chrono::system_clock::now();
+
     auto result = reg.RegisterWithSequenceAsCorrespondence(src_points, tgt_points);
-    std::cout << (int) result << std::endl;
+
+    auto end = std::chrono::system_clock::now();
+    auto cost = std::chrono::duration<double, std::milli>(end - start).count();
+
+    std::cout << "Registration status " << (int) result << std::endl;
+    std::cout << "take " << cost << " millisecond" << std::endl;
 
     /// do transformation
     auto src_points_2_tgt_frame = PointSet::Transform(src_points, reg.transformation_); // transform point set
