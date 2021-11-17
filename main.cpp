@@ -110,6 +110,16 @@
 int main() {
     Registration reg = Registration();
 
+
+//    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
+//                                                   {0.0596195, 0.0500485, 0.0889023, },
+//                                                   {0.0597568, 0.0515476, 0.0861541, }};
+//
+//    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
+//                                                   {0.385245, -0.526556, 0.388402, },
+//                                                   {0.387153, -0.529029, 0.388643, }};
+
+
     std::vector<double> query_point = {0.0595164, 0.0533297, 0.0857159, };
 //
 //    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },

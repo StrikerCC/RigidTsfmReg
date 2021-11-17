@@ -5,7 +5,7 @@
 #ifndef RIGIDTRANSREG_REGISTRATION_H
 #define RIGIDTRANSREG_REGISTRATION_H
 #include <iostream>
-#include <eigen3/Eigen/Core>
+#include <Eigen/Core>
 #include <vector>
 #include <map>
 #include <nlohmann/json.hpp>

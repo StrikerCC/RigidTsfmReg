@@ -5,7 +5,7 @@
 #ifndef RIGIDTRANSREG_POINTSET_H
 #define RIGIDTRANSREG_POINTSET_H
 
-#include <eigen3/Eigen/Core>
+#include <Eigen/Core>
 #include <vector>
 #include <iostream>
 
