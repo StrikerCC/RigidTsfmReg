@@ -111,15 +111,15 @@ int main() {
     Registration reg = Registration();
 
     std::vector<double> query_point = {0.0595164, 0.0533297, 0.0857159, };
-
-    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
-                                                   {0.0596195, 0.0500485, 0.0889023, },
-                                                   {0.0597568, 0.0515476, 0.0861541, },
-                                                   {0.0599648, 0.0502481, 0.0876689, },
-                                                   {0.0598265, 0.0499625, 0.0860588, },
-                                                   {0.0596821, 0.0456999, 0.092095, },
-                                                   {0.0595453, 0.0439616, 0.0932945, },
-                                                   {0.0601673, 0.0442375, 0.0924098, }};
+//
+//    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
+//                                                   {0.0596195, 0.0500485, 0.0889023, },
+//                                                   {0.0597568, 0.0515476, 0.0861541, },
+//                                                   {0.0599648, 0.0502481, 0.0876689, },
+//                                                   {0.0598265, 0.0499625, 0.0860588, },
+//                                                   {0.0596821, 0.0456999, 0.092095, },
+//                                                   {0.0595453, 0.0439616, 0.0932945, },
+//                                                   {0.0601673, 0.0442375, 0.0924098, }};
 //                                                   {0.0626142, 0.0467576, 0.0860099, },
 //                                                   {0.0624336, 0.0435443, 0.0888359, },
 //                                                   {0.0646273, 0.0439355, 0.0879918, },
@@ -133,15 +133,15 @@ int main() {
 //                                                   {0.0594974, 0.0467962, 0.0906146, },
 //                                                   {0.0601746, 0.0471376, 0.0892356, },
 //                                                   {0.0611901, 0.0484408, 0.0861569, },};
-
-    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
-                                                   {0.385245, -0.526556, 0.388402, },
-                                                   {0.387153, -0.529029, 0.388643, },
-                                                   {0.386183, -0.527293, 0.388909, },
-                                                   {0.386751, -0.528354, 0.390025, },
-                                                   {0.382379, -0.522402, 0.390309, },
-                                                   {0.381137, -0.520887, 0.391112, },
-                                                   {0.382158, -0.52126, 0.391367, }};
+//
+//    std::vector<std::vector<double>> tgt_points = {{0.387735, -0.530257, 0.387386, },
+//                                                   {0.385245, -0.526556, 0.388402, },
+//                                                   {0.387153, -0.529029, 0.388643, },
+//                                                   {0.386183, -0.527293, 0.388909, },
+//                                                   {0.386751, -0.528354, 0.390025, },
+//                                                   {0.382379, -0.522402, 0.390309, },
+//                                                   {0.381137, -0.520887, 0.391112, },
+//                                                   {0.382158, -0.52126, 0.391367, }};
 //                                                   {0.388031, -0.525366, 0.392759, },
 //                                                   {0.385504, -0.522106, 0.393912, },
 //                                                   {0.387827, -0.521597, 0.39406, },
@@ -155,6 +155,37 @@ int main() {
 //                                                   {0.383287, -0.524011, 0.390195, },
 //                                                   {0.384611, -0.52472, 0.390665, },
 //                                                   {0.387333, -0.526829, 0.391257, },};
+    std::vector<std::vector<double>> src_points = {{-77.8473,-153.208,-65.3903},
+                                                   {79.6214,-138.314,-74.5972},
+                                                   {-63.5132,-153.964,-91.3907},
+                                                   {53.3655,-147.75,-94.4482},
+                                                   {-79.049,-153.746,-111.055},
+                                                   {76.4789,-142.094,-119.898},
+                                                   {7.89999,-250.869,-130.034},
+                                                   {49.0412,-225.777,-97.4579},
+                                                   {25.6939,-233.243,-99.9733},
+                                                   {-38.4461,-236.155,-90.4999},
+                                                   {-10.7764,-236.009,-97.2332},
+                                                   {26.8799,-214.037,-158.93},
+                                                   {-21.6415,-220.581,-155.64},
+                                                   {21.2662,-227.761,-137.733},
+                                                   {-12.018,-231.912,-134.536}};
+
+    std::vector<std::vector<double>> tgt_points = {{220.45,120.824,160.298},
+                                                   {55.1835,124.231,158.073},
+                                                   {210.383,128.495,132.645},
+                                                   {62.9985,129.299,132.17},
+                                                   {212.443,132.041,107.708},
+                                                   {55.8734,135.427,109.217},
+                                                   {134.659,239.56,122.295},
+                                                   {89.975,210.866,152.33},
+                                                   {113.841,218.907,150.194},
+                                                   {180.126,213.697,153.049},
+                                                   {154.419,219.463,150.789},
+                                                   {110.566,214.806,88.8482},
+                                                   {155.522,219.27,90.1044},
+                                                   {116.985,220.823,111.095},
+                                                   {153.563,222.441,113.083}};
 
     /// estimate transformation
     auto start = std::chrono::system_clock::now();
@@ -171,29 +202,32 @@ int main() {
     auto src_points_2_tgt_frame = PointSet::Transform(src_points, reg.transformation_); // transform point set
     auto src_point_2_tgt_frame = PointSet::Transform(query_point, reg.transformation_ );// transform a point
 
-    /// error
-    std::cout << "Point Set Transformation: " << std::endl;
-    std::cout << "Transformation estimated: \n"  << reg.transformation_ << std::endl;
-    std::cout << "RMSE after transformation applied: " << TransformationEstimation::ComputeRMSE(src_points_2_tgt_frame, tgt_points) << std::endl;
-    std::cout << std::endl;
+    /// log
+    reg.RecordLog("./log.json");
 
-    std::cout << "A Point Transformation: " << std::endl;
-    std::cout << "Transformation estimated: \n"  << reg.transformation_ << std::endl;
-    std::cout << "Point Coord before transformation: " << std::endl;
-    for (auto coord : src_points[0]) {
-        std::cout << coord << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "after transformation" << std::endl;
-    for (auto coord : src_point_2_tgt_frame) {
-        std::cout << coord << " ";
-    }
-    std::cout << std::endl;
-    std::cout << "ground truth" << std::endl;
-    for (auto coord : tgt_points[0]) {
-        std::cout << coord << " ";
-    }
-    std::cout << std::endl;
+    /// error
+//    std::cout << "Point Set Transformation: " << std::endl;
+//    std::cout << "Transformation estimated: \n"  << reg.transformation_ << std::endl;
+//    std::cout << "RMSE after transformation applied: " << TransformationEstimation::ComputeRMSE(src_points_2_tgt_frame, tgt_points) << std::endl;
+//    std::cout << std::endl;
+//
+//    std::cout << "A Point Transformation: " << std::endl;
+//    std::cout << "Transformation estimated: \n"  << reg.transformation_ << std::endl;
+//    std::cout << "Point Coord before transformation: " << std::endl;
+//    for (auto coord : src_points[0]) {
+//        std::cout << coord << " ";
+//    }
+//    std::cout << std::endl;
+//    std::cout << "after transformation" << std::endl;
+//    for (auto coord : src_point_2_tgt_frame) {
+//        std::cout << coord << " ";
+//    }
+//    std::cout << std::endl;
+//    std::cout << "ground truth" << std::endl;
+//    for (auto coord : tgt_points[0]) {
+//        std::cout << coord << " ";
+//    }
+//    std::cout << std::endl;
 
     return 0;
 }

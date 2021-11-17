@@ -7,6 +7,8 @@
 #include <iostream>
 #include <eigen3/Eigen/Core>
 #include <vector>
+#include <map>
+#include <nlohmann/json.hpp>
 
 enum class status {
     reg_incomplete = 0,
@@ -24,9 +26,20 @@ public:
     /// \param tgt target points
     status RegisterWithSequenceAsCorrespondence(const std::vector<std::vector<double>>& src, const std::vector<std::vector<double>>& tgt);
 
+    /// estimate a optimal rigid body transformation that mapping points in source frame to target frame
+    /// \param src source points with names
+    /// \param tgt target points with names
+    /// \return
+    status RegisterWithSequenceAsCorrespondence(const std::map<std::string, std::vector<double>>& src, const std::map<std::string, std::vector<double>>& tgt);
+
+    void RecordLog(std::string log_path);
+
 public:
     /// last transformation estimated by function Registration::RegisterWithSequenceAsCorrespondence
+    std::vector<std::vector<double>> src_;
+    std::vector<std::vector<double>> tgt_;
     Eigen::Matrix4d transformation_;
+    double error_ = INFINITY;
 };
 
 

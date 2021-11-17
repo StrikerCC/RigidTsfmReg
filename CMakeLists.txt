@@ -18,6 +18,12 @@ ELSE ()
     MESSAGE(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
 ENDIF()
 
+
+####################################### open3d #######################################
+set(Open3D_DIR /home/cheng/sources/open3d13/install_release_cxx11AbiOn/lib/cmake/Open3D)
+find_package(Open3D)
+
+
 include_directories("./registration")
 
 add_executable(RigidTransReg main.cpp registration/TransformationEstimation.cpp registration/TransformationEstimation.h registration/PointSet.cpp registration/PointSet.h registration/Registration.cpp registration/Registration.h)
