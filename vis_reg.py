@@ -1,5 +1,6 @@
 
 import json
+import os
 
 import SimpleITK
 import numpy as np
@@ -7,7 +8,7 @@ import open3d
 import vedo
 import vedo.applications
 from vedo.mesh import merge
-
+import os
 
 def read_log(file_path):
     f = open(file_path)
@@ -16,9 +17,17 @@ def read_log(file_path):
     return result
 
 
-def to_mhd(file_path):
+def build_mhd(dicom_path, ct_file_path):
+    vol = vedo.load(dicom_path)
+    vedo.io.write(vol, ct_file_path)
+    return ct_file_path
+
+
+def mha_to_mhd(file_path):
     if file_path[:-3] == 'mhd':
         return file_path
+    if os.path.exists(file_path[:-3] + 'mhd'):
+        return file_path[:-3] + 'mhd'
     img = SimpleITK.ReadImage(file_path)
     spacing = img.GetSpacing()
     array = SimpleITK.GetArrayFromImage(img)
@@ -29,18 +38,17 @@ def to_mhd(file_path):
     return file_path[:-3] + 'mhd'
 
 
-# def vis_mhd(file_path):
-#     vol = vedo.load(file_path)
-#     vedo.show(vol)
-
-
-def vis(reg_result, face_src, face_tgt):
+def vis_reg(reg_result, face_src, face_tgt):
     src = reg_result['src']
     tgt = reg_result['tgt']
+    tracking_src = reg_result['tracking_in_src']
+    tracking_tgt = reg_result['tracking_in_tgt']
     tsfm = np.asarray(reg_result['tsfm'])
 
     print('src', src)
     print('tgt', tgt)
+    print('tracking in source', tracking_src)
+    print('tracking in target', tracking_tgt)
     print('tsfm', tsfm)
 
     # draw points
@@ -54,94 +62,66 @@ def vis(reg_result, face_src, face_tgt):
     pc_src = vedo.Points(src, r=18, c='g')
     pc_tgt = vedo.Points(tgt, r=18, c='r')
 
-    arrow = vedo.Arrows(pc_src, pc_tgt, s=0.5, alpha=0.2)       # draw line between correspondence
+    arrow = vedo.Arrows(pc_src, pc_tgt, s=0.5, alpha=0.8)       # draw line between correspondence
+    track_src = vedo.Arrow(tracking_src[0], tracking_src[-1], s=0.5, alpha=1.0)
+    track_tgt = vedo.Arrow(tracking_tgt[0], tracking_tgt[-1], s=0.5, alpha=1.0)
 
     '''before registration'''
-    vedo.show(pc_src, face_src, origin, title='src marker')
+    vedo.show(pc_src, face_src, track_src, origin, title='src marker')
     vedo.show(pc_tgt, face_tgt, origin, title='tgt marker')
-    vedo.show(pc_src, pc_tgt, arrow, face_src, origin, title='src and tgt match')
+    vedo.show(pc_src, pc_tgt, arrow, face_tgt, origin, title='src and tgt match')
 
     '''after registration'''
     # apply reg result
     pc_src.applyTransform(tsfm)
     face_src = face_src.applyTransform(tsfm)
-    arrow = vedo.Arrows(pc_src, pc_tgt, s=1.0, alpha=0.2)
+    arrow = vedo.Arrows(pc_src, pc_tgt, s=3.0, alpha=0.2)
 
     vedo.show(pc_src, pc_tgt, arrow, title='marker match')
-    vedo.show(pc_src, pc_tgt, arrow, face_src, face_tgt, title='face match')
-
+    vedo.show(pc_src, pc_tgt, arrow, face_src, face_tgt, track_tgt, title='face match')
+    vedo.show(face_tgt, track_tgt, title='tracking result')
     return
 
 
-def take_surface(file_path, threshold=[-196.294]):
+def take_outer_surface(file_path, threshold=[-196.294]):
     if isinstance(file_path, str):
         slice = vedo.load(file_path)
     else:
         slice = file_path
     isos = slice.isosurface(threshold=threshold)
-    splitems = isos.splitByConnectivity(maxdepth=5)
-    vedo.show(splitems[0])
-    return splitems[0]
 
-    # vedo.show(isos, title=file_path)
-    # return isos
-
+    # splitem = isos.splitByConnectivity(maxdepth=5)[0]
+    splitem = isos
+    vedo.show(splitem)
+    return splitem
 
 
-def vis_reg_result():
+def main():
     """"""
-    ct_file_path = './bin/data/model_man/b.mha'
-    cam_file_path = './bin/data/model_man/img0.5.mha'
-    ''''''
 
-    ct_file_path = to_mhd(ct_file_path)
-    cam_file_path = to_mhd(cam_file_path)
+    ################################### cam ###################################
+    '''read image'''
+    cam_file_path = './data/model_man/img0.5.mhd'
+    cam_file_path = mha_to_mhd(cam_file_path)
+    face_src = take_outer_surface(cam_file_path, [8000.0])
 
+    ################################### ct ###################################
+    '''img file paths'''
+    dicom_path = './data/model_man/722brain'
+    ct_file_path = './data/model_man/brain.mhd'
+    if not os.path.exists(ct_file_path):
+        ct_file_path = build_mhd(dicom_path, ct_file_path)
+        ct_file_path = mha_to_mhd(ct_file_path)
+    face_tgt = take_outer_surface(ct_file_path, [-196.294])
+
+    ################################### reg ###################################
     '''read reg log file'''
     log_file_path = './bin/log.json'
     reg_result = read_log(log_file_path)
 
-    '''read image'''
-    face_src = take_surface(ct_file_path, [-196.294])
-    face_tgt = take_surface(cam_file_path, [8000.0])
-
     '''vis'''
-
-    vis(reg_result, face_src, face_tgt)
-
+    vis_reg(reg_result, face_src, face_tgt)
     return
-
-
-def main():
-    key_pts_file_path = './config/facepoints.json'
-    ct_file_path = './bin/data/model_man/brain.mhd'
-    dicom_apth = '/home/cheng/proj/3d/TEASER-plusplus/data/human_models/head_models/model_man/722brain'
-    f = open(key_pts_file_path, 'r')
-    key_pts = json.load(f)
-
-    '''read image'''
-    vol = vedo.load(dicom_apth)
-
-    # path = dicom_apth
-    # reader = SimpleITK.ImageSeriesReader()
-    # dicom_names = reader.GetGDCMSeriesFileNames(path)
-    # reader.SetFileNames(dicom_names)
-    # image = reader.Execute()
-    # SimpleITK.WriteImage(image, './b.mhd')
-    # vol = vedo.load('./b.mhd')
-
-    face_src = take_surface(vol, [-196.294])
-    key_pc = vedo.Points(list(key_pts.values()), r=15, c='r')
-    vedo.show(key_pc, face_src)
-    for key in key_pts.keys():
-        print(key, ': ', key_pts[key])
-
-        if len(key_pts[key]) < 3:
-            continue
-
-        marker = vedo.Point(pos=key_pts[key], r=10, c='r')
-        # vedo.show(marker, title=key)
-        vedo.show(face_src, marker, title=key)
 
 
 if __name__ == '__main__':

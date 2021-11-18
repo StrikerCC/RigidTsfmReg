@@ -5,7 +5,8 @@
 #ifndef RIGIDTRANSREG_POINTSET_H
 #define RIGIDTRANSREG_POINTSET_H
 
-#include <Eigen/Core>
+//#include <Eigen/Core>
+#include <eigen3/Eigen/Core>
 #include <vector>
 #include <iostream>
 
@@ -44,6 +45,7 @@ public:
     /// \param transformation 4x4 transformation matrix
     /// \return transformed points, shape (N, 3)
     static std::vector<std::vector<double>> Transform(const std::vector<std::vector<double>> &points, const Eigen::Matrix4d &transformation);
+
     /// Transform input point using transformation
     /// \param point point to be transform, expect shape (3)
     /// \param transformation 4x4 transformation matrix

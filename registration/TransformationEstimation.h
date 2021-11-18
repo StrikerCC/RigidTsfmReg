@@ -5,8 +5,11 @@
 #ifndef RIGIDTRANSREG_TRANSFORMATIONESTIMATION_H
 #define RIGIDTRANSREG_TRANSFORMATIONESTIMATION_H
 
-#include <Eigen/Core>
-#include <Eigen/Geometry>
+//#include <Eigen/Core>
+//#include <Eigen/Geometry>
+
+#include <eigen3/Eigen/Core>
+#include <eigen3/Eigen/Geometry>
 #include <vector>
 #include <iostream>
 #include <random>
@@ -25,6 +28,8 @@ public:
     /// \return RMSE between all point correspondence
     static double ComputeRMSE(const PointSet& src, const PointSet& tgt);
 //    std::vector<std::vector<float>> ComputeTransformation(const PointSet& src, const PointSet& tgt);
+
+    static std::vector<double> ComputeRSE(const PointSet& src, const PointSet& tgt);
 
     /// compute rigid body transformation that mapping points in source frame to target frame, using Umeyama algorithm
     /// \param src source points

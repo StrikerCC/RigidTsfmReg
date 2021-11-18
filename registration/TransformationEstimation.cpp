@@ -15,9 +15,26 @@ double TransformationEstimation::ComputeRMSE(const PointSet &src, const PointSet
     }
     double err = 0.0;
     for (int i = 0; i < src.GetNumOfPoints(); i++) {
+//        std::cout << i << ": " << (src.points_[i] - tgt.points_[i]).squaredNorm() << std::endl;
         err += (src.points_[i] - tgt.points_[i]).squaredNorm();
     }
     return std::sqrt(err / (double) src.GetNumOfPoints());
+}
+
+std::vector<double> TransformationEstimation::ComputeRSE(const PointSet &src, const PointSet &tgt) {
+    if (src.GetNumOfPoints() != tgt.GetNumOfPoints()) {
+        std::cout << "TransformationEstimation::ComputeRMSE: number of source points: " << src.GetNumOfPoints() << " doesn't match with number of target points: " << tgt.GetNumOfPoints() << std::endl;
+        return {};
+    }
+    if (src.empty()) {
+        std::cout << "TransformationEstimation::ComputeRMSE: No points to compute rmse" << std::endl;
+        return {};
+    }
+    std::vector<double> err;
+    for (int i = 0; i < src.GetNumOfPoints(); i++) {
+        err.push_back((src.points_[i] - tgt.points_[i]).squaredNorm());
+    }
+    return err;
 }
 
 //std::vector<std::vector<float>>
@@ -135,3 +152,4 @@ Eigen::Matrix4d TransformationEstimation::ComputeTransformationRANSAC(const Poin
 //    return max_num_inlier < src.GetNumOfPoints() ? best_transformation : TransformationEstimation::ComputeTransformationRANSAC(src, tgt, max_correspondences_distance/2);
         return best_transformation;
 }
+
