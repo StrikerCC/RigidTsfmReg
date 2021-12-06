@@ -40,6 +40,13 @@ public:
     void Transform(std::vector<std::vector<double>> transformation);
 
     /// static func
+
+    ///
+    /// \param point_1
+    /// \param point_2
+    /// \return
+    static double NormalizedDotProduct(const std::vector<double> &point_1, const std::vector<double> &point_2);
+
     /// Transform input points using transformation
     /// \param points points to be transform, expect shape (N, 3)
     /// \param transformation 4x4 transformation matrix

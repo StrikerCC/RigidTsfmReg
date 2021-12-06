@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include "registration/Registration.h"
 #include "registration/TransformationEstimation.h"
@@ -14,7 +15,7 @@
 
 int main() {
     Registration reg = Registration();
-
+//    std::cout << "dot " << std::setprecision(20) << PointSet::NormalizedDotProduct({100.0, 0.0, -100.0}, {1.0, 0, 0.0}) << std::endl;
 
 //    std::vector<std::vector<double>> src_points = {{0.0595164, 0.0533297, 0.0857159, },
 //                                                   {0.0596195, 0.0500485, 0.0889023, },

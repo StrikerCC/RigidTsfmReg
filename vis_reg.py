@@ -10,6 +10,7 @@ import vedo.applications
 from vedo.mesh import merge
 import os
 
+
 def read_log(file_path):
     f = open(file_path)
     result = json.load(f)
@@ -80,6 +81,13 @@ def vis_reg(reg_result, face_src, face_tgt):
     vedo.show(pc_src, pc_tgt, arrow, title='marker match')
     vedo.show(pc_src, pc_tgt, arrow, face_src, face_tgt, track_tgt, title='face match')
     vedo.show(face_tgt, track_tgt, title='tracking result')
+
+    '''vis the tracking tgt in tgt frame'''
+    print(tracking_tgt)
+    for tracking_pt in tracking_tgt:
+        pt_ = vedo.Sphere(pos=tracking_pt, r=5)
+        vedo.show(face_tgt, pt_)
+
     return
 
 

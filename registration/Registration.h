@@ -10,7 +10,7 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
-//#include <nlohmann/json.hpp>
+#include <nlohmann/json.hpp>
 
 enum class status {
     reg_incomplete = 0,
@@ -54,6 +54,7 @@ public:
     std::unordered_map<std::string, std::vector<double>> tgt_with_name_;
 
     Eigen::Matrix4d transformation_;
+    Eigen::Matrix4d transformation_inv_;
     double error_ = INFINITY;
 };
 

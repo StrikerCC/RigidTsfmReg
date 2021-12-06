@@ -65,6 +65,23 @@ void PointSet::Transform(std::vector<std::vector<double>> transformation) {
     this->Transform(transformation_eigen);
 }
 
+double PointSet::NormalizedDotProduct(const std::vector<double>& point_1, const std::vector<double>& point_2) {
+    Eigen::VectorXd point_1_eigen(std::max(point_1.size(), point_2.size())), point_2_eigen(std::max(point_1.size(), point_2.size()));
+    /// copy to eigen vector
+    for (int i = 0; i < std::max(point_1.size(), point_2.size()); i++) {
+        point_1_eigen(i) = point_1[i];
+        point_2_eigen(i) = point_2[i];
+    }
+
+    /// normalize
+    point_1_eigen = point_1_eigen.normalized();
+    point_2_eigen = point_2_eigen.normalized();
+
+    /// compute dot product
+    return point_1_eigen.dot(point_2_eigen);
+}
+
+
 std::vector<std::vector<double>> PointSet::Transform(const std::vector<std::vector<double>> &points, const Eigen::Matrix4d &transformation) {
     PointSet point_set = PointSet(points);
     point_set.Transform(transformation);

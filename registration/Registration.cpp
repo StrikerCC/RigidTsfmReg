@@ -81,26 +81,26 @@ status Registration::RegisterWithSequenceAsCorrespondence(const std::unordered_m
     return this->RegisterWithSequenceAsCorrespondence(src_vec, tgt_vec);
 }
 
-//void Registration::RecordLog(const std::string& log_path, const std::vector<std::vector<double>>& tracking_in_src, const std::vector<std::vector<double>>& tracking_in_tgt) {
-//    std::ofstream out(log_path);
-//    nlohmann::json log;
-//    log["error"] = this->error_;
-//    log["src_map"] = this->src_with_name_;
-//    log["tgt_map"] = this->tgt_with_name_;
-//    log["src"] = this->src_;
-//    log["tgt"] = this->tgt_;
-//    log["tracking_in_src"] = tracking_in_src;
-//    log["tracking_in_tgt"] = tracking_in_tgt;
-//
-//    // make eigen matrix to std::vector for writing
-//    std::vector<std::vector<double>> tsfm_v;
-//    for (int i = 0; i < 4; i++) {
-//        std::vector<double> row;
-//        for (int j = 0; j < 4; j++) {
-//            row.push_back(this->transformation_(i, j));
-//        }
-//        tsfm_v.push_back(row);
-//    }
-//    log["tsfm"] = tsfm_v;
-//    out << log << std::endl;
-//}
+void Registration::RecordLog(const std::string& log_path, const std::vector<std::vector<double>>& tracking_in_src, const std::vector<std::vector<double>>& tracking_in_tgt) {
+    std::ofstream out(log_path);
+    nlohmann::json log;
+    log["error"] = this->error_;
+    log["src_map"] = this->src_with_name_;
+    log["tgt_map"] = this->tgt_with_name_;
+    log["src"] = this->src_;
+    log["tgt"] = this->tgt_;
+    log["tracking_in_src"] = tracking_in_src;
+    log["tracking_in_tgt"] = tracking_in_tgt;
+
+    // make eigen matrix to std::vector for writing
+    std::vector<std::vector<double>> tsfm_v;
+    for (int i = 0; i < 4; i++) {
+        std::vector<double> row;
+        for (int j = 0; j < 4; j++) {
+            row.push_back(this->transformation_(i, j));
+        }
+        tsfm_v.push_back(row);
+    }
+    log["tsfm"] = tsfm_v;
+    out << log << std::endl;
+}
